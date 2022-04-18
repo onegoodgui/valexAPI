@@ -11,24 +11,15 @@ export async function rechargeCard(req:Request, res:Response){
     const cardId = parseInt(id);
 
     // A chave de API deve ser possuida por alguma empresa
-    const company = await companyServices.getCompanyFromAPIKey(companyAPIKeyHeaders);
-    if(!company){
-        res.status(404);
-        return
-    }
+    await companyServices.getCompanyFromAPIKey(companyAPIKeyHeaders);
+
 
     // Somente cartões cadastrados devem ser recarregados
-    if(!await cardServices.findCardById(cardId)){
-        res.sendStatus(409);
-        return
-    }
+    await cardServices.findCardById(cardId)
 
     // Somente cartões não expirados devem ser recarregados
-    if(await cardServices.cardIsExpired(cardId)){
-        res.send('card is expired');
-        return
-    }
-
+    await cardServices.cardIsExpired(cardId)
+    
     await rechargeServices.rechargeCard({cardId, amount})
     res.sendStatus(200);
 }

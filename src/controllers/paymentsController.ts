@@ -10,38 +10,21 @@ export async function makePayment(req:Request, res:Response){
 
     const {password, amount, businessId} = req.body;
 
-    // Somente cartões cadastrados devem ser recarregados
+    // Somente cartões cadastrados e ativados devem poder transacionar
     const card = await cardServices.findCardById(cardId);
-    if(!card){
-        res.sendStatus(409);
-        return
-    }
     
-    // Somente cartões não expirados devem ser recarregados
-    if(await cardServices.cardIsExpired(cardId)){
-        res.send('card is expired');
-        return
-    }
+    // Somente cartões não expirados devem poder transacionar
+    await cardServices.cardIsExpired(cardId);
+
     // A senha do cartão deverá ser recebida e verificada para garantir a segurança da requisição
-    if(! await paymentServices.passwordVerification(cardId,password)){
-        res.send('invalid password');
-        return
-    }
+    await paymentServices.passwordVerification(cardId,password)
 
     // Somente estabelecimentos cadastrados devem poder transacionar
-    const business = await paymentServices.businessExists(businessId);
-    if(! business){
-        res.send('business ID not registered');
-        return
-    }
-
-    // Somente estabelecimentos do mesmo tipo do cartão devem poder transacionar com ele
-    if(business.type !== card.type){
-        res.send('business type does not match card type');
-        return
-    }
+    await paymentServices.businessExists(businessId, card);
     
-    const availableAmonut = await paymentServices.cardAvailableAmount(cardId);
+    await paymentServices.availableAmountIsSufficient(cardId, amount)
 
-    res.send('chegou aqui');
+    await paymentServices.makePayment({cardId, businessId, amount})
+
+    res.sendStatus(200)
 }

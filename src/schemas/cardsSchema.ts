@@ -4,7 +4,7 @@ export const createCardSchema = joi.object({
 
     companyId:joi.number().positive(),
     employeeId: joi.number().positive(),
-    cardtype: joi.string().valid('groceries', 'health', 'education','restaurants', 'transports').required()
+    cardType: joi.string().valid('groceries', 'health', 'education','restaurant', 'transport').required()
 })
 
 export const updatePasswordSchema = joi.object({
