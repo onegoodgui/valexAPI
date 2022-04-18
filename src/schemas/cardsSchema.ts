@@ -2,7 +2,6 @@ import joi from "joi";
 
 export const createCardSchema = joi.object({
 
-    companyId:joi.number().positive(),
     employeeId: joi.number().positive(),
     cardType: joi.string().valid('groceries', 'health', 'education','restaurant', 'transport').required()
 })

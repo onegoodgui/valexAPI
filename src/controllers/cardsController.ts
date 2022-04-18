@@ -12,10 +12,10 @@ export async function createCard(req:Request, res:Response){
 
     const {'x-api-key': companyAPIKeyHeaders} = req.headers;
 
-    const {companyId, employeeId, cardType} = req.body;
+    const {employeeId, cardType} = req.body;
 
     //Verificação da existência dos dados fornecidos na requisição
-    if(!companyAPIKeyHeaders || !companyId || !employeeId || !cardType){
+    if(!companyAPIKeyHeaders || !employeeId || !cardType){
 
         throw errorTypes.unprocessableEntityError()
     } 
@@ -28,7 +28,7 @@ export async function createCard(req:Request, res:Response){
     await companyServices.getCompanyFromAPIKey(companyAPIKeyHeaders)
 
     // Somente empregados cadastrados devem possuir cartões
-    const employee = await employeeServices.findEmployeeById(employeeId, companyId)
+    const employee = await employeeServices.findEmployeeById(employeeId)
 
     // Empregados não podem possuir mais de um cartão do mesmo tipo
     await cardServices.checkUserCard(employeeId, cardType);
