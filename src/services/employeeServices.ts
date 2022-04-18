@@ -10,7 +10,7 @@ export async function findEmployeeById(id: number, companyId: number){
     }
     else if(employee.companyId !== companyId){
         console.log('oi')
-        throw errorTypes.conflictError('card type does not match company type')
+        throw errorTypes.conflictError(`this employee does not belong to the company roster`)
     }
 
     return employee

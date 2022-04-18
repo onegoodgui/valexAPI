@@ -93,7 +93,7 @@ export async function insertCard(cardData:CardInsertData){
 export async function findCardById(id:number){
     const card = await cardRepository.findById(id);
     if(!card){
-        throw errorTypes.notFoundError()
+        throw errorTypes.notFoundError('card ID does not exist')
     }
 
     return await cardRepository.findById(id)

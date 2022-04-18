@@ -73,7 +73,7 @@ export async function activateCard(req:Request, res:Response){
 
     const cardData = {password};
     await cardServices.updateCardPassword(cardId, cardData);
-    res.send('chegou aqui').status(200);
+    res.send('card activated').status(200);
 }
 
 

@@ -16,7 +16,7 @@ const serviceErrorToStatusCode = {
   }
 
   function notFoundError(customMessage?: string){
-    return {type: 'notFound', message: customMessage ? customMessage : 'Conflict'}
+    return {type: 'notFound', message: customMessage ? customMessage : 'Not found'}
   }
 
   function unprocessableEntityError(){
